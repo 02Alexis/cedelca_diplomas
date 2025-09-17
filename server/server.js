@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRoute.js";
+import diplomaRouter from "./routes/diplomaRoute.js";
+import studentRouter from "./routes/studentRoute.js";
 import "dotenv/config";
 
 // allow multiple origins
@@ -23,6 +25,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRouter);
+app.use("/api/diplomas", diplomaRouter);
+app.use("/api/estudiantes", studentRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
