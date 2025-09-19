@@ -1,20 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useStudentStore = create(
+const useStudentListStore = create(
   persist(
     (set) => ({
       students: [],
-      addStudent: (student) =>
-        set((state) => ({ students: [...state.students, student] })),
+      setStudents: (students) => set({ students }),
       clearStudents: () => set({ students: [] }),
     }),
     {
-      name: "student-storage",
+      name: "student-list-storage",
       getStorage: () => localStorage,
     }
   )
 );
 
-export default useStudentStore;
-
+export default useStudentListStore;
