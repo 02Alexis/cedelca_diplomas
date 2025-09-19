@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import See from "../assets/See";
 
 export default function StudentDiplomas() {
   const [document, setDocument] = useState("");
@@ -67,8 +68,15 @@ export default function StudentDiplomas() {
         <table className="w-full text-left table-auto min-w-max">
           <thead>
             <tr>
-              <th className="p-4 border-b border-slate-300 bg-slate-50">Nombre del Diploma</th>
-              <th className="p-4 border-b border-slate-300 bg-slate-50">Fecha de Emisión</th>
+              <th className="p-4 border-b border-slate-300 bg-slate-50">
+                Diploma
+              </th>
+              <th className="p-4 border-b border-slate-300 bg-slate-50">
+                Fecha de Emisión
+              </th>
+              <th className="p-4 border-b border-slate-300 bg-slate-50">
+                Acciones
+              </th>
             </tr>
           </thead>
           {!loading && diplomas.length > 0 && (
@@ -77,20 +85,24 @@ export default function StudentDiplomas() {
                 {filteredDiplomas.map((diploma) => (
                   <tr key={diploma._id} className="hover:bg-slate-50">
                     <td className="p-4 border-b border-slate-200">
-                      <a
-                        href={diploma.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline"
-                      >
+                      <p>
                         {diploma.nameFile}
-                      </a>
+                      </p>
                     </td>
                     <td className="p-4 border-b border-slate-200">
                       <p>
                         Emitido el:{" "}
                         {new Date(diploma.emissionDate).toLocaleDateString()}
                       </p>
+                    </td>
+                    <td className="p-4 border-b border-slate-200">
+                      <a
+                        href={diploma.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <See />
+                      </a>
                     </td>
                   </tr>
                 ))}

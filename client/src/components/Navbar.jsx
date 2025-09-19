@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import {
   Disclosure,
   DisclosureButton,
@@ -14,6 +16,7 @@ import { Link } from "react-router-dom";
 const navigation = [
   { name: "Diplomas", href: "/", current: true },
   { name: "Estudiantes", href: "/estudiantes", current: false },
+  { name: "Cargar Diplomas", href: "/diplomas", current: false },
 ];
 
 function classNames(...classes) {
@@ -21,6 +24,26 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/api/user/logout", {
+        method: "GET",
+        credentials: "include", // enviar cookies
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        // Opcional: limpiar estados globales o contextos aquí
+        navigate("/auth");
+      } else {
+        toast.error("Error al cerrar sesión");
+      }
+    } catch (error) {
+      toast.error("Error de conexión");
+    }
+  };
+
   return (
     <Disclosure
       as="nav"
@@ -74,23 +97,7 @@ const Navbar = () => {
               >
                 <MenuItem>
                   <Link
-                    to="/estudiantes"
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
-                  >
-                    Estudiantes
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link
-                    to="/diplomas"
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
-                  >
-                    Cargar Diplomas
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link
-                    href="#"
+                    onClick={handleLogout}
                     className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
                   >
                     Sign out
