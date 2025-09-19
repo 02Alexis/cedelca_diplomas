@@ -21,3 +21,13 @@ export const crearEstudiante = async (req, res) => {
     res.status(500).json({ message: "Error al crear estudiante" });
   }
 };
+
+// GET /api/estudiantes/listar
+export const listarEstudiantes = async (req, res) => {
+  try {
+    const estudiantes = await Student.find({}, { name: 1, document: 1 });
+    res.json({ estudiantes });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno" });
+  }
+};

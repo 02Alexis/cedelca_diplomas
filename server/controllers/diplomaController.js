@@ -13,16 +13,16 @@ export const uploadMiddleware = upload.single("file");
 // Subida de diploma
 export const subirDiploma = async (req, res) => {
   try {
-    const documento = req.params.documento;
+    const studentId = req.params.studentId;
     const file = req.file;
 
-    if (!documento || !file) {
+    if (!studentId || !file) {
       return res.status(400).json({ message: "Faltan datos" });
     }
     const nombreArchivo = file.originalname;
 
     // Buscar o crear estudiante
-    const estudiante = await Student.findOne({ document: documento });
+    const estudiante = await Student.findById(studentId);
     if (!estudiante) {
       return res.status(404).json({ message: "Estudiante no encontrado, por favor créelo primero" });
     }
