@@ -70,7 +70,7 @@ export const subirDiploma = async (req, res) => {
 // Consultar diplomas por documento
 export const obtenerDiplomas = async (req, res) => {
   try {
-    const { document } = req.query;
+    const { document } = req.query; 
 
     const estudiante = await Student.findOne({ document });
     if (!estudiante) {
