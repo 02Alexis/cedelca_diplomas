@@ -2,10 +2,10 @@ import React from "react";
 
 const Spinner = () => {
   return (
-    <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
-      <div class="flex gap-8">
+    <div className="grid w-full place-items-center rounded-lg">
+      <div className="flex gap-8">
         <svg
-          class="text-gray-300 animate-spin"
+          className="text-gray-300 animate-spin"
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ const Spinner = () => {
             stroke-width="5"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="text-pink-500"
+            className="text-pink-500"
           ></path>
         </svg>
       </div>

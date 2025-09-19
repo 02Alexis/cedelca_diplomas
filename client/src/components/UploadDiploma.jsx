@@ -43,23 +43,17 @@ export default function UploadDiploma() {
     setLoading(true);
     setMessage("");
 
-    // Crear FormData para enviar el archivo
-    const formData = new FormData();
-    formData.append("diploma", file);
-    formData.append("studentId", selectedStudentId);
+    try {        
+      const url = `http://localhost:4000/api/diplomas/subir/${selectedStudentId}`;
+      
+      const formData = new FormData();
+      formData.append("file", file);
 
-    try {
-        
-        const selectedStudent = students.find(s => s._id === selectedStudentId);
-        const url = `http://localhost:4000/api/diplomas/subir/${selectedStudentId}`;
-        const formData = new FormData();
-        formData.append("diploma", file);
-        
-        const res = await fetch(url, {
-          method: "POST",
-          credentials: "include",
-          body: formData,
-        });
+      const res = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
         
       const data = await res.json();
       if (!res.ok || data.success === false) {
