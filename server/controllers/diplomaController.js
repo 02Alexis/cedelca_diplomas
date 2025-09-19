@@ -28,7 +28,7 @@ export const subirDiploma = async (req, res) => {
     }
 
     // Subir archivo a Cloudinary (stream)
-    const streamUpload = (fileBuffer) => {
+    const streamUpload = (buffer) => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
@@ -44,7 +44,7 @@ export const subirDiploma = async (req, res) => {
             }
           }
         );
-        streamifier.createReadStream(fileBuffer).pipe(stream);
+        streamifier.createReadStream(buffer).pipe(stream);
       });
     };
 
@@ -62,8 +62,8 @@ export const subirDiploma = async (req, res) => {
 
     res.json({ message: "Diploma subido con éxito", diploma: nuevoDiploma });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error en servidor" });
+    console.error("Error en subirDiploma:", error);
+    res.status(500).json({ message: "Error en servidor", error: error.message });
   }
 };
 
