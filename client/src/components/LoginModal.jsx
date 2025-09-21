@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import useAuthStore from "../store/useAuthStore";
+import { motion } from "motion/react"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import useAuthStore from "../store/useAuthStore";
 
 export default function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setUser = useAuthStore((state) => state.setUser);
-  const setToken = useAuthStore((state) => state.setToken);
 
   const navigate = useNavigate();
 
@@ -24,7 +24,6 @@ export default function LoginModal() {
       const data = await res.json();
       if (res.ok) {
         setUser(data.user);
-        setToken(data.token); // Ajusta según lo que devuelva el backend
         navigate("/estudiantes");
       } else {
         toast.error(data.message || "Error al iniciar sesión");
@@ -35,9 +34,19 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <motion.div 
+    initial="hidden"
+    whileInView="visible"
+    viewport={{once: true}}
+    transition={{staggerChildren: 0.2}}
+    className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-lg shadow-lg" onSubmit={handleSubmit}>
+        <motion.form 
+        initial={{y: 30, opacity: 0}}
+        whileInView={{y: 0, opacity: 1}}
+        transition={{duration: 0.5, delay: 0.4}}
+        viewport={{once: true}}
+        className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-lg shadow-lg" onSubmit={handleSubmit}>
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight">Iniciar sesión</h2>
 
         <div className="mt-2">
@@ -68,8 +77,8 @@ export default function LoginModal() {
             Entrar
           </button>
         </div>
-        </form>
+        </motion.form>
       </div>
-    </div>
+    </motion.div>
   );
 }

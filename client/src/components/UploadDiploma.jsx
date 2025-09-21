@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-
+import { motion } from "motion/react";
+import Select from "react-select";
 import useStudentListStore from "../store/useStudentListStore";
 import Spinner from "./Spinner";
 import Upload from "../assets/Upload";
@@ -13,6 +14,11 @@ export default function UploadDiploma() {
 
   const students = useStudentListStore((state) => state.students);
   const setStudents = useStudentListStore((state) => state.setStudents);
+
+  const options = students.map((st) => ({
+    value: st._id,
+    label: `${st.name} (${st.document})`,
+  }));
 
   // Cargar estudiantes al montar
   useEffect(() => {
@@ -73,28 +79,31 @@ export default function UploadDiploma() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <form
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ staggerChildren: 0.2 }}
+      className="p-8 max-w-4xl mx-auto"
+    >
+      <motion.form
+        initial={{ y: 30, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        viewport={{ once: true }}
         className="max-w-md p-4 bg-white rounded shadow"
         onSubmit={handleSubmit}
       >
         <h2 className="text-xl font-bold mb-4">Subir Diploma a Estudiante</h2>
         <div className="max-w-md">
-          <div className="mb-2 block">
-            <label className="block mb-1">Selecciona estudiante</label>
-          </div>
-          <select
-            value={selectedStudentId}
-            onChange={(e) => setSelectedStudentId(e.target.value)}
-            className="w-full border mb-2 border-gray-500/30 outline-none rounded p-2"
-          >
-            <option value="">-- Seleccione un estudiante --</option>
-            {students.map((st) => (
-              <option key={st._id} value={st._id}>
-                {st.name} ({st.document})
-              </option>
-            ))}
-          </select>
+          <Select
+            options={options}
+            value={options.find(option => option.value === selectedStudentId) || null}
+            onChange={(selectedOption) => setSelectedStudentId(selectedOption ? selectedOption.value : "")}
+            placeholder="Seleccione un estudiante"
+            isClearable
+            className="text-dark-500 mb-2"
+          />
         </div>
 
         <div className="flex items-center justify-center w-full">
@@ -117,7 +126,9 @@ export default function UploadDiploma() {
           </label>
         </div>
         {file && (
-          <p className="mt-2 text-gray-700">Archivo seleccionado: {file.name}</p>
+          <p className="mt-2 text-gray-700">
+            Archivo seleccionado: {file.name}
+          </p>
         )}
 
         <button
@@ -127,7 +138,7 @@ export default function UploadDiploma() {
         >
           {loading ? <Spinner /> : "Subir Diploma"}
         </button>
-      </form>
-    </div>  
+      </motion.form>
+    </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { motion } from "motion/react"
 import useAuthStore from "./store/useAuthStore";
 import HomePage from "./pages/HomePage";
 import LoginModal from "./components/LoginModal";
@@ -14,7 +15,7 @@ export default function App() {
   return (
     <>
     <Toaster />
-      <Navbar />
+    {user && <Navbar />}
       <Routes>
         <Route
           path="/"

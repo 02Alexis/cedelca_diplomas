@@ -5,10 +5,8 @@ const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
-      token: null,
       setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
-      logout: () => set({ user: null, token: null }),
+      logout: () => set({ user: null }),
     }),
     {
       name: "auth-storage", // nombre para poner en localStorage

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import {
   Disclosure,
@@ -10,8 +10,8 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
-
+import useAuthStore from "../store/useAuthStore";
+import { motion } from "motion/react"
 
 const navigation = [
   { name: "Diplomas", href: "/", current: true },
@@ -25,6 +25,7 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const logoutStore = useAuthStore((state) => state.logout);
 
   const handleLogout = async () => {
     try {
@@ -35,6 +36,7 @@ const Navbar = () => {
       const data = await res.json();
       if (res.ok && data.success) {
         // Opcional: limpiar estados globales o contextos aquí
+        logoutStore();
         navigate("/auth");
       } else {
         toast.error("Error al cerrar sesión");
@@ -45,6 +47,11 @@ const Navbar = () => {
   };
 
   return (
+    <motion.div
+    initial={{y: -50, opacity: 0}}
+    animate={{y: 0, opacity: 1}}
+    transition={{duration: 0.6, ease: 'easeInOut'}}
+    >
     <Disclosure
       as="nav"
       className="relative after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
@@ -96,12 +103,12 @@ const Navbar = () => {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <MenuItem>
-                  <Link
+                  <button
                     onClick={handleLogout}
-                    className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
+                    className="block w-full px-4 py-2 text-left text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
                   >
                     Sign out
-                  </Link>
+                  </button>
                 </MenuItem>
               </MenuItems>
             </Menu>
@@ -130,6 +137,7 @@ const Navbar = () => {
         </div>
       </DisclosurePanel>
     </Disclosure>
+    </motion.div>
   );
 };
 

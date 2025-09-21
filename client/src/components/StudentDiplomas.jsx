@@ -1,34 +1,47 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { motion } from "motion/react"
 import See from "../assets/See";
+import Spinner from "./Spinner";
 
 export default function StudentDiplomas() {
   const [document, setDocument] = useState("");
   const [diplomas, setDiplomas] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const variants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: (index) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: index * 0.1,
+        duration: 0.4,
+      },
+    }),
+  };
 
   // Función para consultar diplomas por documento
   const fetchDiplomas = () => {
     if (!document) {
       setDiplomas([]);
-      setError("Por favor ingresa un número de documento.");
+      toast.error("Por favor ingresa un número de Estudiante.");
       return;
     }
     setLoading(true);
-    setError("");
     fetch(`http://localhost:4000/api/diplomas/listar?document=${document}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.diplomas && data.diplomas.length > 0) {
           setDiplomas(data.diplomas);
         } else {
-          setError("No se encontraron diplomas para este documento.");
+          toast.error("No se encontraron diplomas para este Estudiante.");
           setDiplomas([]);
         }
       })
       .catch(() => {
-        setError("Error al cargar diplomas.");
+        toast.error("Error al cargar diplomas.");
         setDiplomas([]);
       })
       .finally(() => setLoading(false));
@@ -40,10 +53,19 @@ export default function StudentDiplomas() {
   );
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-2">
+    <motion.div 
+    initial={{y: 30, opacity: 0}}
+    whileInView={{y: 0, opacity: 1}}
+    transition={{duration: 0.6}}
+    viewport={{once: true}}>
+      <motion.h2
+      initial={{y: 20, opacity: 0}}
+      whileInView={{y: 0, opacity: 1}}
+      transition={{duration: 0.5}}
+      viewport={{once: true}}
+      className="text-xl font-bold mb-2">
         Consultar Diplomas por Estudiante
-      </h2>
+      </motion.h2>
 
       <div className="mb-4">
         <input
@@ -61,11 +83,14 @@ export default function StudentDiplomas() {
         </button>
       </div>
 
-      {loading && <p>Cargando diplomas...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <Spinner />}
 
       <div className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
-        <table className="w-full text-left table-auto min-w-max">
+        <motion.table
+          className="w-full text-left table-auto min-w-max"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}>
           <thead>
             <tr>
               <th className="p-4 border-b border-slate-300 bg-slate-50">
@@ -82,8 +107,15 @@ export default function StudentDiplomas() {
           {!loading && diplomas.length > 0 && (
             <>
               <tbody>
-                {filteredDiplomas.map((diploma) => (
-                  <tr key={diploma._id} className="hover:bg-slate-50">
+                {filteredDiplomas.map((diploma, index) => (
+                  <motion.tr
+                  key={diploma._id}
+                  className="hover:bg-slate-50"
+                  initial="hidden"
+                  animate="visible"
+                  custom={index}
+                  variants={variants}
+                    >
                     <td className="p-4 border-b border-slate-200">
                       <p>
                         {diploma.nameFile}
@@ -104,13 +136,13 @@ export default function StudentDiplomas() {
                         <See />
                       </a>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </>
           )}
-        </table>
+        </motion.table>
       </div>
-    </div>
+    </motion.div>
   );
 }
