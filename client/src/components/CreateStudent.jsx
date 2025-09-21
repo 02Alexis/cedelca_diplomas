@@ -56,7 +56,7 @@ export default function CreateStudent() {
         onSubmit={handleCreate}
       >
         <h2 className="text-xl font-bold mb-4">Crear Estudiante</h2>
-        {errorMsg && <p className="text-red-600 mb-2">{errorMsg}</p>}
+        {errorMsg && <p className="text-primary mb-2">{errorMsg}</p>}
         <label className="block mb-1">Nombre completo</label>
         <input
           type="text"
@@ -76,7 +76,7 @@ export default function CreateStudent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full my-3 bg-indigo-500 hover:bg-indigo-600/90 active:scale-95 transition py-2.5 rounded text-white"
+          className="w-full my-3 bg-primary hover:bg-primary-hover active:scale-95 transition py-2.5 rounded text-white"
         >
           {loading ? "Creando..." : "Crear Estudiante"}
         </button>

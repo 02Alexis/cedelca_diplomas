@@ -134,7 +134,7 @@ export default function UploadDiploma() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded disabled:opacity-50 mt-4"
+          className="w-full bg-primary hover:bg-primary-hover text-white py-2 rounded disabled:opacity-50 mt-4"
         >
           {loading ? <Spinner /> : "Subir Diploma"}
         </button>

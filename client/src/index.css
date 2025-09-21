@@ -5,3 +5,8 @@
     font-family: "Manrope", sans-serif;
     font-weight: 500;
 }
+
+@theme {
+    --color-primary: #F44336;
+    --color-primary-hover: #D32F2F;
+  }
