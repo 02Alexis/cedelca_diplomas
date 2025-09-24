@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { motion } from "motion/react";
 import Select from "react-select";
+import { useSearchParams } from "react-router-dom";
 import useStudentListStore from "../store/useStudentListStore";
 import Spinner from "./Spinner";
 import Upload from "../assets/Upload";
 
 export default function UploadDiploma() {
-  const [selectedStudentId, setSelectedStudentId] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
   const students = useStudentListStore((state) => state.students);
   const setStudents = useStudentListStore((state) => state.setStudents);
+
+  const [searchParams] = useSearchParams();
+  const studentFromUrl = searchParams.get("student") || "";
+
+  const [selectedStudentId, setSelectedStudentId] = useState(studentFromUrl);
 
   const options = students.map((st) => ({
     value: st._id,
@@ -30,10 +34,10 @@ export default function UploadDiploma() {
         if (data.estudiantes) {
           setStudents(data.estudiantes);
         } else {
-          setMessage("No se pudo cargar la lista de estudiantes");
+          toast.error("No se pudo cargar la lista de estudiantes");
         }
       })
-      .catch(() => setMessage("Error cargando estudiantes"));
+      .catch(() => toast.error("Error cargando estudiantes"));
   }, [setStudents]);
 
   const handleSubmit = async (e) => {
@@ -49,7 +53,6 @@ export default function UploadDiploma() {
     }
 
     setLoading(true);
-    setMessage("");
 
     try {
       const url = `http://localhost:4000/api/diplomas/subir/${selectedStudentId}`;
@@ -109,7 +112,9 @@ export default function UploadDiploma() {
         <div className="flex items-center justify-center w-full">
           <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <Upload />
+              <div className="text-gray-500 dark:text-gray-400">
+                <Upload />
+              </div>
               <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-semibold">Haga clic para cargar</span> o
                 arrastre y suelte

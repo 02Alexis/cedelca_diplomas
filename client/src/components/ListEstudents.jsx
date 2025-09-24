@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import Spinner from "./Spinner";
+import Upload from "../assets/Upload";
 
 export default function ListEstudents() {
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -40,6 +43,10 @@ export default function ListEstudents() {
         duration: 0.4,
       },
     }),
+  };
+
+  const handleLoadDiploma = (studentId) => {
+    navigate(`/diplomas?student=${studentId}`);
   };
 
   // Calcular estudiantes para página actual
@@ -84,6 +91,7 @@ export default function ListEstudents() {
               <tr className="bg-gray-100">
                 <th className="p-4 border-b border-slate-300 bg-slate-50">Nombre</th>
                 <th className="p-4 border-b border-slate-300 bg-slate-50">Documento</th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -98,6 +106,15 @@ export default function ListEstudents() {
                   </td>
                   <td className="p-4 border-b border-slate-200">
                     {student.document}
+                  </td>
+                  <td className="p-4 border-b border-slate-200">
+                    <button
+                      onClick={() => handleLoadDiploma(student._id)}
+                      className="bg-primary hover:bg-primary-hover text-white px-3 py-1 rounded cursor-pointer"
+                      title="Subir Diploma"
+                    >
+                      <Upload />
+                    </button>
                   </td>
                 </motion.tr>
               ))}
