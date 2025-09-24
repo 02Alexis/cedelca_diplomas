@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
+import { toast } from "react-hot-toast";
 
 export default function CreateStudent() {
   const [name, setName] = useState("");
   const [document, setDocument] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
 
   const handleCreate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
 
     try {
       const res = await fetch("http://localhost:4000/api/estudiantes/crear", {
@@ -25,16 +24,14 @@ export default function CreateStudent() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMsg(data.message || "Error al crear estudiante");
-        console.error("Error backend:", data);
+        toast.error(data.message || "Error al crear estudiante");
       } else {
-        console.log("Estudiante creado:", data);
+        toast.success("Estudiante creado exitosamente");
         setName("");
         setDocument("");
       }
     } catch (error) {
-      setErrorMsg("Error de conexión");
-      console.error("Error fetch:", error);
+      toast.error("Error de conexión");
     } finally {
       setLoading(false);
     }
@@ -56,7 +53,6 @@ export default function CreateStudent() {
         onSubmit={handleCreate}
       >
         <h2 className="text-xl font-bold mb-4">Crear Estudiante</h2>
-        {errorMsg && <p className="text-primary mb-2">{errorMsg}</p>}
         <label className="block mb-1">Nombre completo</label>
         <input
           type="text"

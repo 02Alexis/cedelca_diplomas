@@ -103,6 +103,14 @@ const Navbar = () => {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <MenuItem>
+                  <Link
+                    to="/list-estudiantes"
+                    className="block w-full px-4 py-2 text-left text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
+                  >
+                    Ver Estudiantes
+                  </Link>
+                </MenuItem>
+                <MenuItem>
                   <button
                     onClick={handleLogout}
                     className="block w-full px-4 py-2 text-left text-sm text-gray-300 data-focus:bg-white/5 data-focus:outline-hidden"
