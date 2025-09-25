@@ -9,6 +9,7 @@ export default function ListEstudents() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,16 +50,19 @@ export default function ListEstudents() {
     navigate(`/diplomas?student=${studentId}`);
   };
 
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   // Calcular estudiantes para página actual
   const indexOfLast = currentPage * rowsPerPage;
   const indexOfFirst = indexOfLast - rowsPerPage;
-  const currentStudents = students.slice(indexOfFirst, indexOfLast);
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
 
   // Cambiar página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Número total de páginas
-  const totalPages = Math.ceil(students.length / rowsPerPage);
+  const totalPages = Math.ceil(filteredStudents.length / rowsPerPage);  
 
   return (
     <motion.div
@@ -78,6 +82,15 @@ export default function ListEstudents() {
         Consultar Diplomas por Estudiante
       </motion.h2>
 
+      <input
+        type="text"
+        placeholder="Buscar estudiante por nombre"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full border mb-4 mt-2 border-gray-500/30 outline-none rounded p-2"
+      />
+
+
       {loading ? (
         <Spinner />
       ) : (
@@ -86,21 +99,31 @@ export default function ListEstudents() {
             className="w-full text-left table-auto min-w-max"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}>
+            transition={{ duration: 0.5 }}
+          >
             <thead>
               <tr className="bg-gray-100">
-                <th className="p-4 border-b border-slate-300 bg-slate-50">Nombre</th>
-                <th className="p-4 border-b border-slate-300 bg-slate-50">Documento</th>
-                <th className="p-4 border-b border-slate-300 bg-slate-50">Acciones</th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  Nombre
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  Documento
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody>
               {currentStudents.map((student, index) => (
-                <motion.tr key={student._id} className="hover:bg-slate-50"
-                initial="hidden"
-                animate="visible"
-                custom={index}
-                variants={variants}>
+                <motion.tr
+                  key={student._id}
+                  className="hover:bg-slate-50"
+                  initial="hidden"
+                  animate="visible"
+                  custom={index}
+                  variants={variants}
+                >
                   <td className="p-4 border-b border-slate-200">
                     {student.name}
                   </td>
