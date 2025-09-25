@@ -64,6 +64,11 @@ export default function ListEstudents() {
   // Número total de páginas
   const totalPages = Math.ceil(filteredStudents.length / rowsPerPage);  
 
+    // Manejar click para navegar a diplomas de estudiante
+    const handleClickStudent = (studentId) => {
+      navigate(`/list-estudiantes/diplomas-estudiante/${studentId}`);
+    };
+
   return (
     <motion.div
       initial={{ y: 30, opacity: 0 }}
@@ -123,6 +128,7 @@ export default function ListEstudents() {
                   animate="visible"
                   custom={index}
                   variants={variants}
+                  onClick={() => handleClickStudent(student._id)}
                 >
                   <td className="p-4 border-b border-slate-200">
                     {student.name}

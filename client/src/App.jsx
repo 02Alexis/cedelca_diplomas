@@ -8,6 +8,8 @@ import CreateStudent from "./components/CreateStudent";
 import UploadDiploma from "./components/UploadDiploma";
 import Navbar from "./components/Navbar";
 import ListEstudents from "./components/ListEstudents";
+import DiplomasEstudiante from "./components/DiplomasEstudiante";
+
 export default function App() {
   const user = useAuthStore((state) => state.user);
 
@@ -24,6 +26,7 @@ export default function App() {
         <Route path="/estudiantes" element={user ? <CreateStudent /> : <Navigate to="/auth" />} />
         <Route path="/diplomas" element={user ? <UploadDiploma /> : <Navigate to="/auth" />} />
         <Route path="/list-estudiantes" element={user ? <ListEstudents /> : <Navigate to="/auth" />} />
+        <Route path="/list-estudiantes/diplomas-estudiante/:studentId" element={user ? <DiplomasEstudiante /> : <Navigate to="/auth" />} />
 
       </Routes>
     </>
