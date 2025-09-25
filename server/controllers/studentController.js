@@ -1,4 +1,5 @@
 import Student from "../models/Student.js";
+import Diploma from "../models/Diploma.js";
 
 export const crearEstudiante = async (req, res) => {
   try {
@@ -29,5 +30,21 @@ export const listarEstudiantes = async (req, res) => {
     res.json({ estudiantes });
   } catch (error) {
     res.status(500).json({ message: "Error interno" });
+  }
+};
+
+export const listarDiplomasPorEstudiante = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    if (!studentId) {
+      return res.status(400).json({ message: "Falta el id del estudiante" });
+    }
+
+    const diplomas = await Diploma.find({ studentId }).select("nameFile emissionDate url");
+
+    res.json({ diplomas });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error interno al listar diplomas" });
   }
 };
